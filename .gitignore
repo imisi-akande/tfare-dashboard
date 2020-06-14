@@ -1,0 +1,8 @@
+# virtualenv
+tfare-env/
+
+# Finder stuff
+.DS_Store
+
+## pycache
+*__pycache__/
