@@ -101,7 +101,7 @@ def return_figures():
                 yaxis = dict(title = 'Average Air transport fare'),
                 )
 
-    # second chart plots the percentage change in Air fare in different 
+    # second chart plots the percentage change in Airfare in different
     # states between 2016 and 2020 as bar chart
     graph_two = []
     df = clean_percentage_data('data/states_airfare.csv')
@@ -121,7 +121,7 @@ def return_figures():
                 yaxis = dict(title = '% change in Air transport fare'),
                 )
 
-    # third chart plots average transport fare by between states in 2016 and 2020 
+    # third chart plots average transport fare between cities in 2016 and 2020
     # as a line chart
     graph_three = []
     df = clean_average_data('data/states_inter_city_bus_journey.csv')
@@ -140,19 +140,19 @@ def return_figures():
             name = state
             )
         )
-    layout_three = dict(title = 'Average Transport Fare between states <br> in the year 2016 and 2020',
+    layout_three = dict(title = 'Average Transport Fare between cities<br> in state routes in the year 2016 and 2020',
                 xaxis = dict(title = 'Year',
                   autotick=False, tick0=2016, dtick=4),
                 yaxis = dict(title = 'Average intercity transport fare'),
                 )
 
-    # fourth chart plots the percentage change in transport fare between states
-    # between 2016 and 2020 as bar chart
+    # fourth chart plots the percentage change in transport fare between cities 
+    # in state route between 2016 and 2020 as bar chart
     graph_four = []
     df = clean_percentage_data('data/states_inter_city_bus_journey.csv')
     df.columns = ['state','year','inter_city_bus_fare']
     df.sort_values('inter_city_bus_fare', ascending=False, inplace=True)
-    df = df[df['year'] == 'percentage-change-16-20'] 
+    df = df[df['year'] == 'percentage-change-16-20']
 
     graph_four.append(
       go.Bar(
