@@ -3,7 +3,7 @@ import plotly.graph_objs as go
 
 
 def clean_average_data(dataset, keepcolumns = ['State', '2016', '2020'], value_variables = ['2016', '2020']):
-    """Clean transport fare data for a visualization dashboard
+    """Clean average transport fare data for a visualization dashboard
 
     Keeps data range of dates in keep_columns variable and data for all states
     Reorients the columns into a year, state and value
@@ -34,7 +34,7 @@ def clean_average_data(dataset, keepcolumns = ['State', '2016', '2020'], value_v
     return df_melt
 
 def clean_percentage_data(dataset, keepcolumns = ['State', 'percentage-change-16-18', 'percentage-change-16-20'], value_variables = ['percentage-change-16-18', 'percentage-change-16-20']):
-    """Clean transport fare data for a visualization dashboard
+    """Clean the percentage change transport fare data for a visualization dashboard
 
     Keeps data range of dates in keep_columns variable and data for all states
     Reorients the columns into a year, state and value
@@ -167,11 +167,61 @@ def return_figures():
                 width=800,
                 height=400,
                 )
+
+    # fifth chart plots average transport fare between cities in 2016 and 2020
+    # as a line chart
+    graph_five = []
+    df = clean_average_data('data/states_intra_city_bus_journey.csv')
+    df.columns = ['state','year','intra_city_bus_fare']
+    df.sort_values('intra_city_bus_fare', ascending=False, inplace=True)
+
+    for state in statelist:
+        x_val = df[df['state'] == state].year.tolist()
+        y_val =  df[df['state'] == state].intra_city_bus_fare.tolist()
+
+        graph_five.append(
+            go.Scatter(
+            x = x_val,
+            y = y_val,
+            mode = 'lines',
+            name = state
+            )
+        )
+    layout_five = dict(title = 'Average Transport Fare within cities<br> in a particular state in the year 2016 and 2020',
+                xaxis = dict(title = 'Year',
+                  autotick=False, tick0=2016, dtick=4),
+                yaxis = dict(title = 'Average intracity transport fare'),
+                )
+
+    # sixth chart plots the percentage change in transport fare between cities
+    # between 2016 and 2020 as bar chart
+    graph_six = []
+    df = clean_percentage_data('data/states_intra_city_bus_journey.csv')
+    df.columns = ['state','year','intra_city_bus_fare']
+    df.sort_values('intra_city_bus_fare', ascending=False, inplace=True)
+    df = df[df['year'] == 'percentage-change-16-20']
+
+    graph_six.append(
+      go.Bar(
+      x = df.state.tolist(),
+      y = df.intra_city_bus_fare.tolist(),
+      )
+    )
+
+    layout_six = dict(title = 'Percentage change in intracity transport Fare per state <br> between the year 2016 and 2020',
+                xaxis = dict(title = 'State',),
+                yaxis = dict(title = '% change in intracity transport-fare'),
+                width=800,
+                height=400,
+                )
+
     # append all charts to the figures list
     figures = []
     figures.append(dict(data=graph_one, layout=layout_one))
     figures.append(dict(data=graph_two, layout=layout_two))
     figures.append(dict(data=graph_three, layout=layout_three))
     figures.append(dict(data=graph_four, layout=layout_four))
+    figures.append(dict(data=graph_five, layout=layout_five))
+    figures.append(dict(data=graph_six, layout=layout_six))
 
     return figures
