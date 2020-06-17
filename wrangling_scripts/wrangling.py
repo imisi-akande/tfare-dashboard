@@ -79,13 +79,13 @@ def return_figures():
     # as a line chart
     graph_one = []
     df = clean_average_data('data/states_airfare.csv')
-    df.columns = ['state','year','averagefare']
-    df.sort_values('averagefare', ascending=False, inplace=True)
+    df.columns = ['state','year','airfare']
+    df.sort_values('airfare', ascending=False, inplace=True)
     statelist = df.state.unique().tolist()
 
     for state in statelist:
       x_val = df[df['state'] == state].year.tolist()
-      y_val =  df[df['state'] == state].averagefare.tolist()
+      y_val =  df[df['state'] == state].airfare.tolist()
       graph_one.append(
           go.Scatter(
           x = x_val,
@@ -98,32 +98,80 @@ def return_figures():
     layout_one = dict(title = 'Average Transport Fare by Air <br> per State in the year 2016 and 2020',
                 xaxis = dict(title = 'Year',
                   autotick=False, tick0=2016, dtick=4),
-                yaxis = dict(title = 'Hectares'),
+                yaxis = dict(title = 'Average Air transport fare'),
                 )
 
-    # second chart plots the  percentage change in transport fare in different 
+    # second chart plots the percentage change in Air fare in different 
     # states between 2016 and 2020 as bar chart
     graph_two = []
     df = clean_percentage_data('data/states_airfare.csv')
-    df.columns = ['state','years','percentfare']
-    df.sort_values('percentfare', ascending=False, inplace=True)
-    df = df[df['years'] == 'percentage-change-16-20'] 
+    df.columns = ['state','year','airfare']
+    df.sort_values('airfare', ascending=False, inplace=True)
+    df = df[df['year'] == 'percentage-change-16-20'] 
 
     graph_two.append(
       go.Bar(
       x = df.state.tolist(),
-      y = df.percentfare.tolist(),
+      y = df.airfare.tolist(),
       )
     )
 
     layout_two = dict(title = 'Percentage change in Air transport Fare per state <br> between the year 2016 and 2020',
                 xaxis = dict(title = 'State',),
-                yaxis = dict(title = '% change in transport-fare'),
+                yaxis = dict(title = '% change in Air transport fare'),
                 )
 
+    # third chart plots average transport fare by between states in 2016 and 2020 
+    # as a line chart
+    graph_three = []
+    df = clean_average_data('data/states_inter_city_bus_journey.csv')
+    df.columns = ['state','year','inter_city_bus_fare']
+    df.sort_values('inter_city_bus_fare', ascending=False, inplace=True)
+
+    for state in statelist:
+        x_val = df[df['state'] == state].year.tolist()
+        y_val =  df[df['state'] == state].inter_city_bus_fare.tolist()
+
+        graph_three.append(
+            go.Scatter(
+            x = x_val,
+            y = y_val,
+            mode = 'lines',
+            name = state
+            )
+        )
+    layout_three = dict(title = 'Average Transport Fare between states <br> in the year 2016 and 2020',
+                xaxis = dict(title = 'Year',
+                  autotick=False, tick0=2016, dtick=4),
+                yaxis = dict(title = 'Average intercity transport fare'),
+                )
+
+    # fourth chart plots the percentage change in transport fare between states
+    # between 2016 and 2020 as bar chart
+    graph_four = []
+    df = clean_percentage_data('data/states_inter_city_bus_journey.csv')
+    df.columns = ['state','year','inter_city_bus_fare']
+    df.sort_values('inter_city_bus_fare', ascending=False, inplace=True)
+    df = df[df['year'] == 'percentage-change-16-20'] 
+
+    graph_four.append(
+      go.Bar(
+      x = df.state.tolist(),
+      y = df.inter_city_bus_fare.tolist(),
+      )
+    )
+
+    layout_four = dict(title = 'Percentage change in intercity transport Fare per state <br> between the year 2016 and 2020',
+                xaxis = dict(title = 'State',),
+                yaxis = dict(title = '% change in intercity transport-fare'),
+                width=800,
+                height=400,
+                )
     # append all charts to the figures list
     figures = []
     figures.append(dict(data=graph_one, layout=layout_one))
     figures.append(dict(data=graph_two, layout=layout_two))
+    figures.append(dict(data=graph_three, layout=layout_three))
+    figures.append(dict(data=graph_four, layout=layout_four))
 
     return figures
