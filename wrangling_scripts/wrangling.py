@@ -3,7 +3,7 @@ import plotly.graph_objs as go
 
 
 def clean_average_data(dataset, keepcolumns = ['State', '2016', '2020'], value_variables = ['2016', '2020']):
-    """Clean transport fare data for a visualization dashboard
+    """Clean average transport fare data for a visualization dashboard
 
     Keeps data range of dates in keep_columns variable and data for all states
     Reorients the columns into a year, state and value
@@ -34,7 +34,7 @@ def clean_average_data(dataset, keepcolumns = ['State', '2016', '2020'], value_v
     return df_melt
 
 def clean_percentage_data(dataset, keepcolumns = ['State', 'percentage-change-16-18', 'percentage-change-16-20'], value_variables = ['percentage-change-16-18', 'percentage-change-16-20']):
-    """Clean transport fare data for a visualization dashboard
+    """Clean the percentage change transport fare data for a visualization dashboard
 
     Keeps data range of dates in keep_columns variable and data for all states
     Reorients the columns into a year, state and value
@@ -64,14 +64,14 @@ def clean_percentage_data(dataset, keepcolumns = ['State', 'percentage-change-16
     # output clean csv file
     return df_melt
 
-def return_figures():
-    """Creates four plotly visualizations
+def return_page_one_figures():
+    """Creates six plotly visualizations
 
     Args:
         None
 
     Returns:
-        list (dict): list containing the four plotly visualizations
+        list (dict): list containing the six plotly visualizations
 
     """
 
@@ -167,11 +167,178 @@ def return_figures():
                 width=800,
                 height=400,
                 )
+
+    # fifth chart plots average transport fare between cities in 2016 and 2020
+    # as a line chart
+    graph_five = []
+    df = clean_average_data('data/states_intra_city_bus_journey.csv')
+    df.columns = ['state','year','intra_city_bus_fare']
+    df.sort_values('intra_city_bus_fare', ascending=False, inplace=True)
+
+    for state in statelist:
+        x_val = df[df['state'] == state].year.tolist()
+        y_val =  df[df['state'] == state].intra_city_bus_fare.tolist()
+
+        graph_five.append(
+            go.Scatter(
+            x = x_val,
+            y = y_val,
+            mode = 'lines',
+            name = state
+            )
+        )
+    layout_five = dict(title = 'Average Transport Fare within cities<br> in a particular state in the year 2016 and 2020',
+                xaxis = dict(title = 'Year',
+                  autotick=False, tick0=2016, dtick=4),
+                yaxis = dict(title = 'Average intracity transport fare'),
+                )
+
+    # sixth chart plots the percentage change in transport fare between cities
+    # between 2016 and 2020 as bar chart
+    graph_six = []
+    df = clean_percentage_data('data/states_intra_city_bus_journey.csv')
+    df.columns = ['state','year','intra_city_bus_fare']
+    df.sort_values('intra_city_bus_fare', ascending=False, inplace=True)
+    df = df[df['year'] == 'percentage-change-16-20']
+
+    graph_six.append(
+      go.Bar(
+      x = df.state.tolist(),
+      y = df.intra_city_bus_fare.tolist(),
+      )
+    )
+
+    layout_six = dict(title = 'Percentage change in intracity transport Fare per state <br> between the year 2016 and 2020',
+                xaxis = dict(title = 'State',),
+                yaxis = dict(title = '% change in intracity transport-fare'),
+                width=800,
+                height=400,
+                )
+
     # append all charts to the figures list
     figures = []
     figures.append(dict(data=graph_one, layout=layout_one))
     figures.append(dict(data=graph_two, layout=layout_two))
     figures.append(dict(data=graph_three, layout=layout_three))
     figures.append(dict(data=graph_four, layout=layout_four))
+    figures.append(dict(data=graph_five, layout=layout_five))
+    figures.append(dict(data=graph_six, layout=layout_six))
 
     return figures
+
+def return_page_two_figures():
+    """Creates four plotly visualizations for page two
+
+    Args:
+        None
+
+    Returns:
+        list (dict): list containing the four plotly visualizations
+        for page two
+
+    """
+
+    # first chart plots average motorcycle fare within cities in 2016 and 2020
+    # as a line chart
+    graph_one = []
+    df = clean_average_data('data/states_motorcycle_journey.csv')
+    df.columns = ['state','year','motorcycle_fare']
+    df.sort_values('motorcycle_fare', ascending=False, inplace=True)
+    statelist = df.state.unique().tolist()
+
+    for state in statelist:
+        x_val = df[df['state'] == state].year.tolist()
+        y_val =  df[df['state'] == state].motorcycle_fare.tolist()
+
+        graph_one.append(
+            go.Scatter(
+            x = x_val,
+            y = y_val,
+            mode = 'lines',
+            name = state
+            )
+        )
+    layout_one = dict(title = 'Average motorcycle Fare per drop within cities<br> in the year 2016 and 2020',
+                xaxis = dict(title = 'Year',
+                  autotick=False, tick0=2016, dtick=4),
+                yaxis = dict(title = 'Average motorcycle transport fare'),
+                )
+
+    # second chart plots the percentage change in motorcycle fare within cities
+    # between 2016 and 2020 as bar chart
+    graph_two = []
+    df = clean_percentage_data('data/states_motorcycle_journey.csv')
+    df.columns = ['state','year','motorcycle_fare']
+    df.sort_values('motorcycle_fare', ascending=False, inplace=True)
+    df = df[df['year'] == 'percentage-change-16-20']
+
+    graph_two.append(
+      go.Bar(
+      x = df.state.tolist(),
+      y = df.motorcycle_fare.tolist(),
+      )
+    )
+
+    layout_two = dict(title = 'Percentage change in motorcycle Fare per drop within cities <br> between the year 2016 and 2020',
+                xaxis = dict(title = 'State',),
+                yaxis = dict(title = '% change in motorcycle transport fare'),
+                width=800,
+                height=400,
+                )
+
+    # third chart plots average water fare within cities in 2016 and 2020
+    # as a line chart
+    graph_three = []
+    df = clean_average_data('data/states_water_journey.csv')
+    df.columns = ['state','year','water_fare']
+    df.sort_values('water_fare', ascending=False, inplace=True)
+    statelist = df.state.unique().tolist()
+
+    for state in statelist:
+        x_val = df[df['state'] == state].year.tolist()
+        y_val =  df[df['state'] == state].water_fare.tolist()
+
+        graph_three.append(
+            go.Scatter(
+            x = x_val,
+            y = y_val,
+            mode = 'lines',
+            name = state
+            )
+        )
+    layout_three = dict(title = 'Average water fare per state<br> in the year 2016 and 2020',
+                xaxis = dict(title = 'Year',
+                  autotick=False, tick0=2016, dtick=4),
+                yaxis = dict(title = 'Average water transport fare'),
+                )
+
+    # fourth chart plots the percentage change in water fare within cities
+    # between 2016 and 2020 as bar chart
+    graph_four = []
+    df = clean_percentage_data('data/states_water_journey.csv')
+    df.columns = ['state','year','water_fare']
+    df.sort_values('water_fare', ascending=False, inplace=True)
+    df = df[df['year'] == 'percentage-change-16-20']
+
+    graph_four.append(
+      go.Bar(
+      x = df.state.tolist(),
+      y = df.water_fare.tolist(),
+      )
+    )
+
+    layout_four = dict(title = 'Percentage change in water fare per state <br> between the year 2016 and 2020',
+                xaxis = dict(title = 'State',),
+                yaxis = dict(title = '% change in water transport fare'),
+                width=800,
+                height=400,
+                )
+
+     # append all charts to the figures list
+    figures_page_two = []
+    figures_page_two.append(dict(data=graph_one, layout=layout_one))
+    figures_page_two.append(dict(data=graph_two, layout=layout_two))
+    figures_page_two.append(dict(data=graph_three, layout=layout_three))
+    figures_page_two.append(dict(data=graph_four, layout=layout_four))
+
+    return figures_page_two
