@@ -50,7 +50,6 @@
             </a>
         </div>
     </div>
-
     <!--visualizations column-->
     <div class="col-11">
 
@@ -61,7 +60,6 @@
             <h4 id="tag-line" class="text-muted">The trend of transport fare on five major routes in the States of Nigeria</h4>
 
         </div>
-
         <!--charts-->
         <div id="charts" class="container mt-3 text-center">
 
@@ -74,7 +72,6 @@
                     <div id="{{ids[1]}}"></div>
                 </div>
             </div>
-
             <!--second row two charts-->
             <div class="row mb-6">
                 <div class="col-6"> 
@@ -88,51 +85,38 @@
                     </div>
                 </div>
             </div>
-            <!--third row two charts-->
-            <div class="row mb-6">
-                <div class="col-6"> 
-                    <div id="chart3">
-                        <div id="{{ids[4]}}"></div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div id="chart4">
-                        <div id="{{ids[5]}}"></div>
-                    </div>
-                </div>
-            </div>
         </div>
     <div>
 </div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-      <li class="page-item active"><a class="page-link" href="/index">1<span class="sr-only">(current)</span></a></li>
-      <li class="page-item"><a class="page-link" href="/page-two">2</a></li>
-      <li class="page-item"><a class="page-link" href="/page-two">Next</a></li>
-    </ul>
-  </nav>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="/index">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="/index">1</a></li>
+            <li class="page-item active"><a class="page-link" href="/page-two">2<span class="sr-only">(current)</span></a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
 </body>
 
 
 <footer>
-    <!-- Copyright -->
-    <div class="container text-center">
-        <small>Author &copy; Akande Imisioluwa</small>
-    </div>
-    <!-- Copyright -->
+<!-- Copyright -->
+<div class="container text-center">
+    <small>Author &copy; Akande Imisioluwa</small>
+</div>
+<!-- Copyright -->
 
-    <script type="text/javascript">
-        // plots the figure with id
-        // id much match the div id above in the html
-        var figures = {{figuresJSON | safe}};
-        var ids = {{ids | safe}};
-        for(var i in figures) {
-            Plotly.plot(ids[i],
-                figures[i].data,
-                figures[i].layout || {});
-        }
-    </script>
+<script type="text/javascript">
+    // plots the figure with id
+    // id much match the div id above in the html
+    var figures = {{figuresJSON | safe}};
+    var ids = {{ids | safe}};
+    for(var i in figures) {
+        Plotly.plot(ids[i],
+            figures[i].data,
+            figures[i].layout || {});
+    }
+</script>
 
 </footer>
 
