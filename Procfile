@@ -1,1 +1,1 @@
-web gunicorn tfare:app
+web gunicorn --chdir web_app tfare:app
