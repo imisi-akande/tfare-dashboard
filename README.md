@@ -28,4 +28,8 @@ project are air, intracity, intercity, water and motorbikes.
 -  Run the application
     - ```python tfare.py```
 
+Transport Fare Watch (March 2020) data was obtained from the [National Bureau of Statistics](https://www.nigerianstat.gov.ng/elibrary?page=4&offset=30)
+
+To see more about the initial data cleaning and preparation, visit this [link](https://github.com/imisi-akande/tfare-watch)
+
 Have fun. Please Feel free to contact me if you encounter any issue.
